@@ -13,6 +13,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.himanshoe.kalendar.Kalendar
+import com.himanshoe.kalendar.model.KalendarType
 import com.juliangg.nails.R
 
 @Composable
@@ -20,16 +22,17 @@ fun CalendarScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.primary))
-            .wrapContentSize(Alignment.Center)
+            .background(colorResource(id = R.color.white))
+            .wrapContentSize(Alignment.TopCenter)
     ) {
-        Text(
+        /*Text(
             text = "Calendar View",
             fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             textAlign = TextAlign.Center,
             fontSize = 25.sp
-        )
+        )*/
+        Kalendar(kalendarType = KalendarType.Firey)
     }
 }
