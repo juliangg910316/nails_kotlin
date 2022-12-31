@@ -10,7 +10,6 @@ data class CalendarDayEvent(
 ) {
     fun getCalendarDayEventList(): List<KalendarEvent> {
         val kalendarDayEvent: MutableList<KalendarEvent> = mutableListOf()
-        Log.i("TAG", "CalendarScreen: $kalendarDay, $kalendarEventList")
         kalendarDayEvent.clear()
         for (event: KalendarEvent in kalendarEventList) {
             if (event.date == kalendarDay.localDate) {

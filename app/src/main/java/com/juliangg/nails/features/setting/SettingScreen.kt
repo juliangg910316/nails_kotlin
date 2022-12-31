@@ -14,19 +14,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.juliangg.nails.R
+import com.juliangg.nails.ui.theme.Blue300
+import com.juliangg.nails.ui.theme.Blue400
+import com.juliangg.nails.ui.theme.Blue800
 
 @Composable
 fun SettingScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.primary))
+            .background(Color.White)
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
             text = "Setting View",
             fontWeight = FontWeight.Bold,
-            color = Color.White,
+            color = Blue800,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             textAlign = TextAlign.Center,
             fontSize = 25.sp

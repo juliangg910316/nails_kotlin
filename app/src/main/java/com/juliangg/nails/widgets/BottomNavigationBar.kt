@@ -13,6 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.juliangg.nails.R
+import com.juliangg.nails.ui.theme.Blue400
+import com.juliangg.nails.ui.theme.Blue800
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
@@ -22,7 +24,7 @@ fun BottomNavigationBar(navController: NavController) {
         NavigationItem.Store,
         NavigationItem.Setting
     )
-    BottomNavigation(backgroundColor = colorResource(id = R.color.primary), contentColor = Color.White) {
+    BottomNavigation(backgroundColor = Blue800, contentColor = Color.White) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
