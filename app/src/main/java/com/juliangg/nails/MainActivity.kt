@@ -15,7 +15,9 @@ import com.juliangg.nails.route.Navigation
 import com.juliangg.nails.ui.theme.NailsTheme
 import com.juliangg.nails.widgets.BottomNavigationBar
 import com.juliangg.nails.widgets.TopBar
+//import dagger.hilt.android.AndroidEntryPoint
 
+//@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

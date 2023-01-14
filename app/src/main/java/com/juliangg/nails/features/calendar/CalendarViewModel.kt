@@ -9,8 +9,9 @@ import com.juliangg.nails.database.turn.TurnDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 import java.time.LocalDateTime
+//import javax.inject.Inject
 
-class CalendarViewModel(
+class CalendarViewModel (
     private val turnDao: TurnDao
 ): ViewModel() {
     val kalendarDay: KalendarDay = KalendarDay(LocalDate(
