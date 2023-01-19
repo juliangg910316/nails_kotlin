@@ -16,6 +16,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.juliangg.nails.features.login.LoginScreen
+import com.juliangg.nails.features.login.RegisterScreen
 import com.juliangg.nails.route.Navigation
 import com.juliangg.nails.ui.theme.NailsTheme
 import com.juliangg.nails.widgets.BottomNavigationBar
@@ -31,9 +32,9 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = Color.White   //MaterialTheme.colors.background
+                    color = Color.Gray   //MaterialTheme.colors.background
                 ) {
-                    LoginScreen()
+                    RegisterScreen()
                 }
             }
         }
