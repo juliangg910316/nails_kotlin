@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.himanshoe.kalendar.Kalendar
 import com.himanshoe.kalendar.color.KalendarThemeColor
@@ -31,11 +32,11 @@ import com.juliangg.nails.ui.theme.*
 import com.juliangg.nails.widgets.CompleteDialogContent
 
 @Composable
-fun CalendarScreen(
-    calendarViewModel: CalendarViewModel = viewModel()
-) {
+fun CalendarScreen() {
     // Context to toast a message
     val ctx: Context = LocalContext.current
+
+    val calendarViewModel = hiltViewModel<CalendarViewModel>()
 
     // Dialog state Manager
     val dialogState: MutableState<Boolean> = remember {

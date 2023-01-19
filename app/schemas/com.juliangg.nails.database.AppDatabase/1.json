@@ -1,0 +1,76 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "fce620cd39b38d1fbf0aac8a5433855e",
+    "entities": [
+      {
+        "tableName": "Turn",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name_client` TEXT NOT NULL, `phone_client` TEXT NOT NULL, `date` TEXT NOT NULL, `pay_previous` TEXT NOT NULL, `pay_total` TEXT NOT NULL, `image` TEXT NOT NULL, `fails` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nameClient",
+            "columnName": "name_client",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phoneClient",
+            "columnName": "phone_client",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payPrevious",
+            "columnName": "pay_previous",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payTotal",
+            "columnName": "pay_total",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fails",
+            "columnName": "fails",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fce620cd39b38d1fbf0aac8a5433855e')"
+    ]
+  }
+}
