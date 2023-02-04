@@ -6,5 +6,5 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class NailsApplication: Application() {
-    val database: AppDatabase by lazy { AppDatabase.getDatabase(this) }
+
 }
