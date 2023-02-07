@@ -8,6 +8,8 @@ class TurnRepository @Inject constructor(private val turnDao: TurnDao){
 
     fun getAll() = turnDao.getAll()
 
+    fun getTurnsFromDate(date: String) = turnDao.getTurnsFromDate(date)
+
     fun saveAll(turns: Turn) = turnDao.saveAll(turns)
 
     fun delete(turn: Turn) = turnDao.delete(turn)

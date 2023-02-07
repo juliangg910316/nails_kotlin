@@ -16,6 +16,9 @@ interface TurnDao {
     @Query("SELECT * FROM turn ORDER BY date ASC")
     fun getAll(): Flow<List<Turn>>
 
+    @Query("SELECT * FROM turn where date = :day")
+    fun getTurnsFromDate(day: String): Flow<List<Turn>>
+
     @Insert
     fun saveAll(vararg turns: Turn)
 

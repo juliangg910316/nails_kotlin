@@ -1,5 +1,6 @@
 package com.juliangg.nails.widgets
 
+import android.widget.Toast
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -13,6 +14,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -33,6 +36,9 @@ fun TopBar(navController: NavHostController) {
     var hasActions by remember {
         mutableStateOf(false)
     }
+    val dialogState: MutableState<Boolean> = remember {
+        mutableStateOf(false)
+    }
     NavHost(navController = navController, startDestination = NavigationItem.Home.route) {
         composable(NavigationItem.Home.route) {
             title = "Home"
@@ -51,11 +57,15 @@ fun TopBar(navController: NavHostController) {
             hasActions = false
         }
     }
+    EditTurnDialog(dialogState = dialogState, turn = null)
+
     TopAppBar(
         title = { Text(text = title, fontSize = 18.sp)},
         actions= {
             if (hasActions) {
-                IconButton(onClick = { }) {
+                IconButton(onClick = {
+                    dialogState.value = true
+                }) {
                     Icon(
                         imageVector = Icons.Default.Add,
                         contentDescription = null
