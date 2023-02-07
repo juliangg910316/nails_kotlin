@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.juliangg.nails.database.turn.Turn
 import com.juliangg.nails.database.turn.TurnDao
 
-@Database(entities = arrayOf(Turn::class), version = 1)
+@Database(entities = [Turn::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun turnDao(): TurnDao
@@ -21,8 +21,8 @@ abstract class AppDatabase: RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context,
                     AppDatabase::class.java,
-                    "app_database")
-                    .createFromAsset("database/nails.db")
+                    "nails-db")
+                    //.createFromAsset("database/nails.db")
                     .build()
                 INSTANCE = instance
 

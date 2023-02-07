@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
  * Each property corresponds to a column. Additionally, an ID is needed as a unique identifier for
  * each row in the database.
  */
-@Entity
+@Entity(tableName = "turns")
 data class Turn(
     @PrimaryKey val id: Int,
     @NonNull @ColumnInfo(name = "name_client") val nameClient: String,
