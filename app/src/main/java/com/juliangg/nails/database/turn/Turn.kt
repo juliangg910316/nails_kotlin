@@ -12,12 +12,20 @@ import androidx.room.PrimaryKey
  */
 @Entity(tableName = "turns")
 data class Turn(
-    @PrimaryKey val id: Int,
-    @NonNull @ColumnInfo(name = "name_client") val nameClient: String,
-    @NonNull @ColumnInfo(name = "phone_client") val phoneClient: String,
-    @NonNull @ColumnInfo(name = "date") val date: String,
-    @NonNull @ColumnInfo(name = "pay_previous") val payPrevious: String,
-    @NonNull @ColumnInfo(name = "pay_total") val payTotal: String,
-    @NonNull @ColumnInfo(name = "image") val image: String,
-    @NonNull @ColumnInfo(name = "fails") val fails: Boolean
-)
+    @PrimaryKey val id: String,
+    @ColumnInfo(name = "name_client") var nameClient: String = "",
+    @ColumnInfo(name = "phone_client") var phoneClient: String = "",
+    @ColumnInfo(name = "day") var day: String,
+    @ColumnInfo(name = "hour") var hour: String = "0:00",
+    @ColumnInfo(name = "am") var am: Boolean = true,
+    @ColumnInfo(name = "pay_previous") var payPrevious: String = "$0.00",
+    @ColumnInfo(name = "pay_total") var payTotal: String = "$0.00",
+    @ColumnInfo(name = "image") var image: String = "",
+    @ColumnInfo(name = "fails") var fails: Boolean = false
+) {
+    override fun toString(): String {
+        return "Turn(id='$id', nameClient='$nameClient', phoneClient='$phoneClient', day='$day', " +
+                "hour='$hour', am='$am', payPrevious='$payPrevious', payTotal='$payTotal', " +
+                "image='$image', fails=$fails)"
+    }
+}

@@ -2,16 +2,16 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "71bad0bcbec573f76ea95b0667557580",
+    "identityHash": "6939305564c245418c2708479ed23bc3",
     "entities": [
       {
         "tableName": "turns",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name_client` TEXT NOT NULL, `phone_client` TEXT NOT NULL, `date` TEXT NOT NULL, `pay_previous` TEXT NOT NULL, `pay_total` TEXT NOT NULL, `image` TEXT NOT NULL, `fails` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name_client` TEXT NOT NULL, `phone_client` TEXT NOT NULL, `date` TEXT NOT NULL, `pay_previous` TEXT NOT NULL, `pay_total` TEXT NOT NULL, `image` TEXT NOT NULL, `fails` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -70,7 +70,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '71bad0bcbec573f76ea95b0667557580')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6939305564c245418c2708479ed23bc3')"
     ]
   }
 }

@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -16,20 +17,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.juliangg.nails.R
+import com.juliangg.nails.database.turn.Turn
 import com.juliangg.nails.features.calendar.CalendarScreen
+import com.juliangg.nails.features.calendar.CalendarViewModel
 import com.juliangg.nails.features.home.HomeScreen
 import com.juliangg.nails.features.setting.SettingScreen
 import com.juliangg.nails.features.store.StoreScreen
 import com.juliangg.nails.ui.theme.Blue400
 import com.juliangg.nails.ui.theme.Blue800
+import kotlinx.datetime.LocalDate
+import java.util.UUID
 
 @Composable
 fun TopBar(navController: NavHostController) {
+    val calendarViewModel = hiltViewModel<CalendarViewModel>()
+    val day by calendarViewModel.daySelected.observeAsState()
     var title by remember {
         mutableStateOf("")
     }
@@ -57,10 +65,10 @@ fun TopBar(navController: NavHostController) {
             hasActions = false
         }
     }
-    EditTurnDialog(dialogState = dialogState, turn = null)
+    //EditTurnDialog(dialogState = dialogState, turn = Turn(id = UUID.randomUUID().toString(), date = day.toString()))
 
     TopAppBar(
-        title = { Text(text = title, fontSize = 18.sp)},
+        title = { Text(text = day.toString(), fontSize = 18.sp)},
         actions= {
             if (hasActions) {
                 IconButton(onClick = {
