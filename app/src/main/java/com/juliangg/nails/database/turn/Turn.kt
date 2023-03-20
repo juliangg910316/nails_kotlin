@@ -1,6 +1,5 @@
 package com.juliangg.nails.database.turn
 
-import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -16,16 +15,15 @@ data class Turn(
     @ColumnInfo(name = "name_client") var nameClient: String = "",
     @ColumnInfo(name = "phone_client") var phoneClient: String = "",
     @ColumnInfo(name = "day") var day: String,
-    @ColumnInfo(name = "hour") var hour: String = "0:00",
-    @ColumnInfo(name = "am") var am: Boolean = true,
-    @ColumnInfo(name = "pay_previous") var payPrevious: String = "$0.00",
-    @ColumnInfo(name = "pay_total") var payTotal: String = "$0.00",
+    @ColumnInfo(name = "hour") var hour: String = "0:00 AM",
+    @ColumnInfo(name = "pay_previous") var payPrevious: Int = 0,
+    @ColumnInfo(name = "pay_total") var payTotal: Int = 0,
     @ColumnInfo(name = "image") var image: String = "",
     @ColumnInfo(name = "fails") var fails: Boolean = false
 ) {
     override fun toString(): String {
-        return "Turn(id='$id', nameClient='$nameClient', phoneClient='$phoneClient', day='$day', " +
-                "hour='$hour', am='$am', payPrevious='$payPrevious', payTotal='$payTotal', " +
+        return "Turn(id='$id', nameClient='$nameClient', phoneClient='$phoneClient', " +
+                "day='$day', hour='$hour', payPrevious='$payPrevious', payTotal='$payTotal', " +
                 "image='$image', fails=$fails)"
     }
 }

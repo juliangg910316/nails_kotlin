@@ -106,7 +106,7 @@ fun CalendarScreen() {
                                             contentDescription = ""
                                         )
                                         Text(
-                                            text = data.payPrevious,
+                                            text = data.payPrevious.toString(),
                                             style = MaterialTheme.typography.caption
                                         )
                                     }

@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TurnDao {
 
-    @Query("SELECT * FROM turns ORDER BY date ASC")
+    @Query("SELECT * FROM turns ORDER BY day ASC")
     fun getAll(): Flow<List<Turn>>
 
-    @Query("SELECT * FROM turns where date = :day")
+    @Query("SELECT * FROM turns where day = :day")
     fun getTurnsFromDate(day: String): Flow<List<Turn>>
 
     @Insert

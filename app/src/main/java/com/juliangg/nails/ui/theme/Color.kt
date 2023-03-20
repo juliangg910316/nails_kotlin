@@ -5,10 +5,12 @@ import androidx.compose.ui.graphics.Color
 val PrimaryColor = Color(0xFF0077B6)
 val LightTextColor = Color(0xFF758084)
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val teal200 = Color(0xFF03DAC5)
+val teal700 = Color(0xFF018786)
+val gray700 = Color(0xFF646C81)
+val gray900 = Color(0xFF23262D)
+val black = Color(0xFF000000)
+val white = Color(0xFFFFFFFF)
 
 val backgroundKalendar = Color(0xFFBB86FC)
 val dayBackgroundKalendar = Color(0xFF6200EE)

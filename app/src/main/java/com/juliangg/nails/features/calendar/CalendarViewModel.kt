@@ -76,19 +76,28 @@ class CalendarViewModel @Inject constructor(
     }
 
     fun setHour(hour: String) {
+        Log.i("TAG", "setHour: $hour")
         turnSelected.value?.hour = hour
     }
 
-    fun setAm(am: Boolean) {
-        turnSelected.value?.am = am
-    }
-
     fun setName(name: String) {
+        Log.i("TAG", "setName: $name")
         turnSelected.value?.nameClient = name
     }
 
     fun setPhone(phone: String) {
+        Log.i("TAG", "setPhone: $phone")
         turnSelected.value?.phoneClient = phone
+    }
+
+    fun setPayPrevious(pay: Int) {
+        Log.i("TAG", "setPayPrevious: $pay")
+        turnSelected.value?.payPrevious = pay
+    }
+
+    fun setPayTotal(pay: Int) {
+        Log.i("TAG", "setPayTotal: $pay")
+        turnSelected.value?.payTotal = pay
     }
 
     /*fun getDaySelected() : String{

@@ -1,5 +1,6 @@
 package com.juliangg.nails.utils
 
+import android.util.Log
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
@@ -12,22 +13,19 @@ class MaskTransformation : VisualTransformation {
 }
 
 fun maskFilter(text: AnnotatedString): TransformedText {
-
-    val out: String
-    when (text.text.length) {
-        0 -> out = "$0.00"
-        1 -> out = "$0.0${text.text}"
-        2 -> out = "$0.${text.text}"
+    Log.i("TAG", "maskFilter: ${text.text}")
+    val input = text.text.replace(".","")
+    Log.i("TAG", "maskFilter: $input")
+    val out: String = when (input.length) {
+        0 -> "$0.00"
+        1 -> "$0.0$input"
+        2 -> "$0.$input"
         else -> {
-            out = "$${
-                text.text.subSequence(
-                    0,
-                    text.text.length - 2
-                )
-            }.${
-                text.text.subSequence(
-                    startIndex = text.text.length - 2,
-                    endIndex = text.text.length
+            val pay: Int = Integer.valueOf(input.substring( 0, input.length - 2))
+            "$${pay}.${
+                input.subSequence(
+                    startIndex = input.length - 2,
+                    endIndex = input.length
                 )
             }"
         }
@@ -35,13 +33,15 @@ fun maskFilter(text: AnnotatedString): TransformedText {
 
     val numberOffsetTranslator = object : OffsetMapping {
         override fun originalToTransformed(offset: Int): Int {
-            if (offset <= 3) return 5
-            return offset + 2
+            Log.i("TAG", "originalToTransformed: $offset")
+            if (offset <= 6) return 5
+            return offset - 1
         }
 
         override fun transformedToOriginal(offset: Int): Int {
-            if (offset <= 5) return 3
-            return offset - 2
+            Log.i("TAG", "transformedToOriginal: $offset")
+            if (offset <= 4) return 4
+            return offset + 1
         }
     }
 
