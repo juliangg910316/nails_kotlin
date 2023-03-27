@@ -20,8 +20,8 @@ interface TurnDao {
     fun getTurnsFromDate(day: String): Flow<List<Turn>>
 
     @Insert
-    fun saveAll(vararg turns: Turn)
+    suspend fun saveAll(vararg turns: Turn)
 
     @Delete
-    fun delete(turn: Turn)
+    suspend fun delete(turn: Turn)
 }

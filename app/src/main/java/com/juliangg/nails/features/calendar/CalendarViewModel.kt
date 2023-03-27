@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import com.himanshoe.kalendar.model.KalendarDay
 import com.himanshoe.kalendar.model.KalendarEvent
 import com.juliangg.nails.database.turn.Turn
@@ -15,8 +12,10 @@ import com.juliangg.nails.database.turn.TurnDao
 import com.juliangg.nails.database.turn.TurnRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
@@ -24,6 +23,8 @@ import javax.inject.Inject
 class CalendarViewModel @Inject constructor(
     private val turnRepository: TurnRepository
 ) : ViewModel() {
+
+    val allTurns: Flow<List<Turn>> = turnRepository.getAll()
 
     val daySelected: MutableLiveData<LocalDate> by lazy {
         MutableLiveData<LocalDate>()
@@ -33,9 +34,9 @@ class CalendarViewModel @Inject constructor(
         MutableLiveData<Turn>()
     }
 
-    val turnsDay: Flow<List<Turn>> =
+    var turnsDay: Flow<List<Turn>> =
         turnRepository.getTurnsFromDate(
-            "${daySelected.value?.dayOfMonth}-${daySelected.value?.monthNumber}-${daySelected.value?.year}"
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         )
 
     val kalendarEvent = listOf(
@@ -46,6 +47,13 @@ class CalendarViewModel @Inject constructor(
         KalendarEvent(LocalDate(2023, 2, 26), "Beidis", "9 AM"),
         KalendarEvent(LocalDate(2023, 2, 27), "Maribel", "9 AM"),
     )
+
+    fun getKalendarEvent(turns : List<Turn>) : List<KalendarEvent> {
+        Log.i("TAG", "getKalendarEvent: $turns")
+        val events : MutableList<KalendarEvent> = mutableListOf()
+        turns.forEach { turn -> events.add(KalendarEvent(LocalDate.parse(turn.day), turn.nameClient, turn.hour)) }
+        return events
+    }
     init {
         daySelected.value = LocalDate(
             LocalDateTime.now().year,
@@ -56,18 +64,22 @@ class CalendarViewModel @Inject constructor(
             id = UUID.randomUUID().toString(),
             day = daySelected.value.toString()
         )
+
     }
 
-    fun fullTurn(): Flow<List<Turn>> = turnRepository.getAll()
-
     fun saveTurn() {
-        turnSelected.value?.let { turnRepository.saveAll(it) }
+        Log.i("TAG", "saveTurn: " + turnSelected.value)
+        viewModelScope.launch {
+            turnSelected.value?.let { turnRepository.saveAll(it) }
+        }
+
     }
 
     fun setDaySelected(kalendarDay: KalendarDay) {
         Log.i("TAG", "setDaySelected: ${kalendarDay.localDate}")
         daySelected.value = kalendarDay.localDate
         turnSelected.value?.day = daySelected.value.toString()
+        turnsDay = turnRepository.getTurnsFromDate(daySelected.value.toString())
     }
 
     fun setTurnSelected(turn: Turn) {

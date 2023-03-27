@@ -1,5 +1,6 @@
 package com.juliangg.nails.features.calendar
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Observer
 import com.himanshoe.kalendar.Kalendar
 import com.himanshoe.kalendar.color.KalendarThemeColor
 import com.himanshoe.kalendar.component.day.config.KalendarDayColors
@@ -41,6 +43,8 @@ fun CalendarScreen() {
     val turnsDay: List<Turn> by calendarViewModel.turnsDay.collectAsState(
         initial = emptyList()
     )
+
+    val allTurns: List<Turn> by calendarViewModel.allTurns.collectAsState(initial = emptyList())
 
     EditTurnDialog(dialogState = dialogState, viewModel = calendarViewModel)
 
@@ -72,7 +76,7 @@ fun CalendarScreen() {
                         kalendarType = KalendarType.Firey,
                         kalendarThemeColor = KalendarThemeColor(Color.White, Blue800, Blue800),
                         kalendarDayColors = KalendarDayColors(Color.Black, Color.White),
-                        kalendarEvents = calendarViewModel.kalendarEvent,
+                        kalendarEvents = calendarViewModel.getKalendarEvent(allTurns),
                         onCurrentDayClick = { a, _ ->
                             calendarViewModel.setDaySelected(kalendarDay = a)
                         },
@@ -82,6 +86,7 @@ fun CalendarScreen() {
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth()
                     ) {
+                        Log.i("TAG", "CalendarScreen: $turnsDay")
                         items(turnsDay) { data ->
                             Card(
                                 modifier = Modifier
