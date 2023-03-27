@@ -1,9 +1,6 @@
 package com.juliangg.nails.database.turn
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -17,7 +14,10 @@ interface TurnDao {
     fun getAll(): Flow<List<Turn>>
 
     @Query("SELECT * FROM turns where day = :day")
-    fun getTurnsFromDate(day: String): Flow<List<Turn>>
+    suspend fun getTurnsFromDate(day: String): List<Turn>
+
+    @Update
+    suspend fun update(turn: Turn)
 
     @Insert
     suspend fun saveAll(vararg turns: Turn)

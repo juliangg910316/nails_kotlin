@@ -39,7 +39,7 @@ import com.juliangg.nails.utils.MaskTransformation
 
 
 @Composable
-fun EditTurnDialog(dialogState: MutableState<Boolean>, viewModel: CalendarViewModel) {
+fun EditTurnDialog(editTurn: Boolean, dialogState: MutableState<Boolean>, viewModel: CalendarViewModel) {
     Log.i("TAG", "EditTurnDialog: turn = ${viewModel.turnSelected.value}")
 
     if (dialogState.value) {
@@ -52,12 +52,12 @@ fun EditTurnDialog(dialogState: MutableState<Boolean>, viewModel: CalendarViewMo
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = if (viewModel.turnSelected.value?.nameClient?.isBlank() == true) "Nuevo turno" else "Editar turno",
+                        text = if (!editTurn) "Nuevo turno" else "Editar turno",
                         fontSize = 24.sp,
                         modifier = Modifier.padding(16.dp),
                         fontWeight = FontWeight.Bold
                     )
-                    MyBody(viewModel)
+                    MyBody(editTurn, viewModel)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(1f)
@@ -65,13 +65,21 @@ fun EditTurnDialog(dialogState: MutableState<Boolean>, viewModel: CalendarViewMo
                         horizontalArrangement = Arrangement.End
                     ) {
                         TextButton(onClick = { dialogState.value = false }) {
-                            Text(text = "Cancelar", fontSize = 20.sp, color = MaterialTheme.colors.primary)
+                            Text(
+                                text = "Cancelar",
+                                fontSize = 20.sp,
+                                color = MaterialTheme.colors.primary
+                            )
                         }
                         TextButton(onClick = {
-                            viewModel.saveTurn()
+                            viewModel.saveTurn(!editTurn)
                             dialogState.value = false
                         }) {
-                            Text(text = "Adicionar", fontSize = 20.sp, color = MaterialTheme.colors.primary)
+                            Text(
+                                text = if (!editTurn) "Adicionar" else "Actualizar",
+                                fontSize = 20.sp,
+                                color = MaterialTheme.colors.primary
+                            )
                         }
 
                     }
@@ -85,7 +93,7 @@ fun EditTurnDialog(dialogState: MutableState<Boolean>, viewModel: CalendarViewMo
 }
 
 @Composable
-fun MyBody(viewModel: CalendarViewModel) {
+fun MyBody(editTurn: Boolean, viewModel: CalendarViewModel) {
 
     //val mHour = mCalendar[Calendar.HOUR_OF_DAY]
     //val mMinute = mCalendar[Calendar.MINUTE]
@@ -115,8 +123,7 @@ fun MyBody(viewModel: CalendarViewModel) {
 
     // Creating a TimePicker dialod
     val mTimePickerDialog = TimePickerDialog(
-        mContext,
-        { _, mHour: Int, mMinute: Int ->
+        mContext, { _, mHour: Int, mMinute: Int ->
             val min = if (mMinute > 9) {
                 "$mMinute"
             } else {
@@ -124,7 +131,7 @@ fun MyBody(viewModel: CalendarViewModel) {
             }
             mTime = if (mHour > 12) {
                 "${mHour - 12}:$min PM"
-            } else if (mHour == 12){
+            } else if (mHour == 12) {
                 "$mHour:$min PM"
             } else {
                 "$mHour:$min AM"
@@ -134,12 +141,13 @@ fun MyBody(viewModel: CalendarViewModel) {
     )
 
     Column(
-        Modifier.padding(all = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        Modifier.padding(all = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp), contentAlignment = Alignment.Center){
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp), contentAlignment = Alignment.Center
+        ) {
             Image(
                 modifier = Modifier
                     .size(72.dp)
@@ -150,8 +158,7 @@ fun MyBody(viewModel: CalendarViewModel) {
                 contentScale = ContentScale.Crop
             )
         }
-        OutlinedTextField(
-            value = name,
+        OutlinedTextField(value = name,
             onValueChange = {
                 name = it
                 viewModel.setName(name)
@@ -167,16 +174,14 @@ fun MyBody(viewModel: CalendarViewModel) {
                 .height(fitHeight)
                 .fillMaxWidth()
         )
-        OutlinedTextField(
-            value = phone,
+        OutlinedTextField(value = phone,
             onValueChange = {
                 phone = it
                 viewModel.setPhone(phone)
             },
             label = { Text(text = "Número Móvil") },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Phone,
-                autoCorrect = true
+                keyboardType = KeyboardType.Phone, autoCorrect = true
             ),
             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
             modifier = Modifier
@@ -208,12 +213,10 @@ fun MyBody(viewModel: CalendarViewModel) {
             }
         }
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.height(fitHeight)
+            horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.height(fitHeight)
         ) {
             Box(modifier = Modifier.weight(weight = 1f, fill = true)) {
-                OutlinedTextField(
-                    value = pay.toString(),
+                OutlinedTextField(value = pay.toString(),
                     onValueChange = {
                         pay = Integer.parseInt(it.filter { it.isDigit() })
                         viewModel.setPayPrevious(pay)
@@ -225,8 +228,7 @@ fun MyBody(viewModel: CalendarViewModel) {
             }
             Spacer(modifier = Modifier.width(8.dp))
             Box(modifier = Modifier.weight(weight = 1f, fill = true)) {
-                OutlinedTextField(
-                    value = payComplete.toString(),
+                OutlinedTextField(value = payComplete.toString(),
                     onValueChange = {
                         payComplete = Integer.parseInt(it.filter { it.isDigit() })
                         viewModel.setPayTotal(payComplete)
@@ -237,16 +239,18 @@ fun MyBody(viewModel: CalendarViewModel) {
                 )
             }
         }
-        Row(
-            modifier = Modifier
-                .height(fitHeight)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
-        ) {
-            Text(text = "Falló")
-            Spacer(modifier = Modifier.width(8.dp))
-            Switch(checked = checkedState.value, onCheckedChange = { checkedState.value = it })
+        if (editTurn) {
+            Row(
+                modifier = Modifier
+                    .height(fitHeight)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(text = "Falló")
+                Spacer(modifier = Modifier.width(8.dp))
+                Switch(checked = checkedState.value, onCheckedChange = { checkedState.value = it })
+            }
         }
     }
 }

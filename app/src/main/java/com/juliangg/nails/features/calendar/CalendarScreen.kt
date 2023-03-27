@@ -1,6 +1,5 @@
 package com.juliangg.nails.features.calendar
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,7 +19,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Observer
 import com.himanshoe.kalendar.Kalendar
 import com.himanshoe.kalendar.color.KalendarThemeColor
 import com.himanshoe.kalendar.component.day.config.KalendarDayColors
@@ -40,19 +39,23 @@ fun CalendarScreen() {
         mutableStateOf(false)
     }
 
-    val turnsDay: List<Turn> by calendarViewModel.turnsDay.collectAsState(
-        initial = emptyList()
-    )
+    val editTurn: MutableState<Boolean> = remember {
+        mutableStateOf(false)
+    }
+
+    val turnsDay = calendarViewModel.turnsDay.observeAsState(initial = emptyList())
 
     val allTurns: List<Turn> by calendarViewModel.allTurns.collectAsState(initial = emptyList())
 
-    EditTurnDialog(dialogState = dialogState, viewModel = calendarViewModel)
+    EditTurnDialog(editTurn.value, dialogState = dialogState, viewModel = calendarViewModel)
 
     Scaffold (
         topBar = {TopAppBar(
             title = { Text(text = "Calendario", fontSize = 18.sp)},
             actions= {
                 IconButton(onClick = {
+                    calendarViewModel.setTurnSelected()
+                    editTurn.value = false
                     dialogState.value = true
                 }) {
                     Icon(
@@ -86,8 +89,7 @@ fun CalendarScreen() {
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth()
                     ) {
-                        Log.i("TAG", "CalendarScreen: $turnsDay")
-                        items(turnsDay) { data ->
+                        items(turnsDay.value) { data ->
                             Card(
                                 modifier = Modifier
                                     .padding(horizontal = 8.dp, vertical = 12.dp)
@@ -97,6 +99,7 @@ fun CalendarScreen() {
                                 shape = RoundedCornerShape(corner = CornerSize(16.dp)),
                                 onClick = {
                                     calendarViewModel.setTurnSelected(data)
+                                    editTurn.value = true
                                     dialogState.value = true
                                 }
                             ) {
@@ -111,7 +114,7 @@ fun CalendarScreen() {
                                             contentDescription = ""
                                         )
                                         Text(
-                                            text = data.payPrevious.toString(),
+                                            text = data.hour,
                                             style = MaterialTheme.typography.caption
                                         )
                                     }
@@ -122,8 +125,14 @@ fun CalendarScreen() {
                                             .align(Alignment.CenterVertically)
                                             .weight(weight = 1f)
                                     ) {
-                                        Text(text = data.nameClient, style = MaterialTheme.typography.h6)
-                                        Text(text = data.phoneClient, style = MaterialTheme.typography.caption)
+                                        Text(
+                                            text = data.nameClient,
+                                            style = MaterialTheme.typography.h6
+                                        )
+                                        Text(
+                                            text = data.phoneClient,
+                                            style = MaterialTheme.typography.caption
+                                        )
                                     }
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_baseline_navigate_next_24),

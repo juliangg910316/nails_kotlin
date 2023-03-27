@@ -2,6 +2,7 @@ package com.juliangg.nails.database.turn
 
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.single
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,10 +11,14 @@ class TurnRepository @Inject constructor(private val turnDao: TurnDao){
 
     fun getAll() = turnDao.getAll()
 
-    fun getTurnsFromDate(date: String) : Flow<List<Turn>> {
+    suspend fun getTurnsFromDate(date: String) : List<Turn> {
         Log.i("TAG", "getTurnsFromDate: $date")
-        return turnDao.getTurnsFromDate(date)
+        val output = turnDao.getTurnsFromDate(date)
+        Log.i("TAG", "getTurnsFromDate: ${output.size}")
+        return output
     }
+
+    suspend fun update(turn: Turn) = turnDao.update(turn)
 
     suspend fun saveAll(turns: Turn) = turnDao.saveAll(turns)
 

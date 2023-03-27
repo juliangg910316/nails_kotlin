@@ -1,14 +1,12 @@
 package com.juliangg.nails.features.calendar
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.himanshoe.kalendar.model.KalendarDay
 import com.himanshoe.kalendar.model.KalendarEvent
 import com.juliangg.nails.database.turn.Turn
-import com.juliangg.nails.database.turn.TurnDao
 import com.juliangg.nails.database.turn.TurnRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -34,24 +32,16 @@ class CalendarViewModel @Inject constructor(
         MutableLiveData<Turn>()
     }
 
-    var turnsDay: Flow<List<Turn>> =
-        turnRepository.getTurnsFromDate(
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        )
-
-    val kalendarEvent = listOf(
-        KalendarEvent(LocalDate(2023, 2, 25), "Julian", "9 AM"),
-        KalendarEvent(LocalDate(2023, 2, 25), "Beidis", "11 AM"),
-        KalendarEvent(LocalDate(2023, 2, 25), "Maribel", "2 PM"),
-        KalendarEvent(LocalDate(2023, 2, 25), "Julian", "5 AM"),
-        KalendarEvent(LocalDate(2023, 2, 26), "Beidis", "9 AM"),
-        KalendarEvent(LocalDate(2023, 2, 27), "Maribel", "9 AM"),
-    )
+    //private val _turnsDay = MutableLiveData<List<Turn>>()
+    val turnsDay: MutableLiveData<List<Turn>> by lazy {
+        MutableLiveData<List<Turn>>()
+    }
 
     fun getKalendarEvent(turns : List<Turn>) : List<KalendarEvent> {
         Log.i("TAG", "getKalendarEvent: $turns")
         val events : MutableList<KalendarEvent> = mutableListOf()
         turns.forEach { turn -> events.add(KalendarEvent(LocalDate.parse(turn.day), turn.nameClient, turn.hour)) }
+        getTurnsFromDate(daySelected.value.toString())
         return events
     }
     init {
@@ -60,31 +50,49 @@ class CalendarViewModel @Inject constructor(
             LocalDateTime.now().monthValue,
             LocalDateTime.now().dayOfMonth
         )
-        turnSelected.value = Turn(
-            id = UUID.randomUUID().toString(),
-            day = daySelected.value.toString()
-        )
+        setTurnSelected()
+        getTurnsFromDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
 
     }
 
-    fun saveTurn() {
+    fun saveTurn(save: Boolean) {
         Log.i("TAG", "saveTurn: " + turnSelected.value)
         viewModelScope.launch {
-            turnSelected.value?.let { turnRepository.saveAll(it) }
+            turnSelected.value?.let {
+                if (save) {
+                    turnRepository.saveAll(it)    //.also { turnRepository.getAll() }
+                } else {
+                    turnRepository.update(it)
+                }
+            }
         }
 
+    }
+
+    private fun getTurnsFromDate(day: String) {
+        viewModelScope.launch {
+            turnsDay.value =
+                turnRepository.getTurnsFromDate(day)
+        }
     }
 
     fun setDaySelected(kalendarDay: KalendarDay) {
         Log.i("TAG", "setDaySelected: ${kalendarDay.localDate}")
         daySelected.value = kalendarDay.localDate
         turnSelected.value?.day = daySelected.value.toString()
-        turnsDay = turnRepository.getTurnsFromDate(daySelected.value.toString())
+        getTurnsFromDate(daySelected.value.toString())
     }
 
     fun setTurnSelected(turn: Turn) {
         Log.i("TAG", "setTurnSelected: $turn")
         turnSelected.value = turn
+    }
+
+    fun setTurnSelected() {
+        turnSelected.value = Turn(
+            id = UUID.randomUUID().toString(),
+            day = daySelected.value.toString()
+        )
     }
 
     fun setHour(hour: String) {
@@ -111,19 +119,5 @@ class CalendarViewModel @Inject constructor(
         Log.i("TAG", "setPayTotal: $pay")
         turnSelected.value?.payTotal = pay
     }
-
-    /*fun getDaySelected() : String{
-        Log.i("TAG", "getDaySelected: ${daySelected.value}")
-        return daySelected.value.toString();
-    }*/
-
-    fun doSomething() {
-
-    }
-
-    fun doSomethingMore() {
-
-    }
-
 
 }
